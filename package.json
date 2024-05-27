@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "books shop",
   "engines": {
-    "node": ">=16.20.0"
+    "node": ">=18.20.0"
   },
   "main": "index.js",
   "scripts": {
