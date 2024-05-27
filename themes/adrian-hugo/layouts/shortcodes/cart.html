@@ -1,0 +1,38 @@
+<div id="shoppingcart" class="shopping cart">
+  <div class="product-list">
+    <table class="table" celpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Количество</th>
+          <th>Цена</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="6" style="text-align: center;">Ваша корзина пуста.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div><span class="carttotal">0.00</span> ₽</div>
+
+    <form action="{{ with .Site.GetPage `checkout.md` }}{{ .RelPermalink }}{{ end }}">
+      <div class="submitbutton">
+        <a href="/shop" class="gray">В магазин</a>
+        <input class="btn btn-black btn-small" type="submit" value="Оформить заказ"/>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<div class="checkout_progress">
+  <ul id="checkout_progress">
+    <li class="current"><span><a href="#">Корзина</a></span></li>
+    <li><span><span>Оформление заказа</span></span></li>
+    <li><span><span>Оплата</span></span></li>
+  </ul>
+</div>

@@ -1,0 +1,235 @@
+Folder PATH listing for volume Windows
+Volume serial number is 000000F5 E066:F747
+C:\HUGO\SITES\HAPPYREADING.RU
+│   .hugo_build.lock
+│   config.toml
+│   happyreadig-tree.txt
+│   
+├───archetypes
+│       default.md
+│       
+├───content
+│   │   .DS_Store
+│   │   
+│   ├───about
+│   │       _index.md
+│   │       
+│   ├───contact
+│   │       _index.md
+│   │       
+│   ├───faq
+│   │       _index.md
+│   │       
+│   ├───search
+│   │       _index.md
+│   │       
+│   └───shop
+│           black-tops.md
+│           blue-shirt.md
+│           classic-watch.md
+│           female-bag.md
+│           floral-kirby.md
+│           hand-bag.md
+│           hand-watch.md
+│           keds.md
+│           ladies-watch.md
+│           lady-lofer.md
+│           lady-shoe.md
+│           orange-bag.md
+│           purse.md
+│           smart-watch.md
+│           sneakers.md
+│           _index.md
+│           
+├───data
+│       about.yml
+│       contact.yml
+│       faq.yml
+│       homepage.yml
+│       
+├───layouts
+├───public
+├───resources
+│   └───_gen
+│       ├───assets
+│       │   └───scss
+│       │       ├───adrian
+│       │       │   └───examplesite
+│       │       │       └───scss
+│       │       │               style.scss_b95b077eb505d5c0aff8055eaced30ad.content
+│       │       │               style.scss_b95b077eb505d5c0aff8055eaced30ad.json
+│       │       │               
+│       │       └───scss
+│       │               style.scss_b95b077eb505d5c0aff8055eaced30ad.content
+│       │               style.scss_b95b077eb505d5c0aff8055eaced30ad.json
+│       │               
+│       └───images
+├───static
+│   └───images
+│       │   close.png
+│       │   favicon.png
+│       │   logo.png
+│       │   marker.png
+│       │   
+│       ├───about
+│       │       about-1.jpg
+│       │       about-2.jpg
+│       │       about-3.jpg
+│       │       cat-1.jpg
+│       │       cat-2.jpg
+│       │       cat-3.jpg
+│       │       
+│       ├───backgrounds
+│       │       counter.jpg
+│       │       header-bg.jpg
+│       │       
+│       ├───products
+│       │       bag-1.jpg
+│       │       bag-2.jpg
+│       │       bag-3.jpg
+│       │       bag-4.jpg
+│       │       shirt-1.jpg
+│       │       shoe-1.jpg
+│       │       shoe-2.jpg
+│       │       shoe-3.jpg
+│       │       shoe-4.jpg
+│       │       shoe-5.jpg
+│       │       tops-1.jpg
+│       │       tops-2.jpg
+│       │       tops-3.jpg
+│       │       watch-1.jpg
+│       │       watch-2.jpg
+│       │       watch-3.jpg
+│       │       watch-4.jpg
+│       │       
+│       ├───slider
+│       │       slideshow1-1.jpg
+│       │       slideshow1-2.jpg
+│       │       slideshow1-3.jpg
+│       │       
+│       └───team
+│               team-img-1.jpg
+│               team-img-2.jpg
+│               team-img-3.jpg
+│               team-img-4.jpg
+│               
+└───themes
+    └───adrian-hugo
+        │   .DS_Store
+        │   
+        ├───archetypes
+        │       default.md
+        │       
+        ├───assets
+        │   │   .DS_Store
+        │   │   
+        │   ├───js
+        │   │       script.js
+        │   │       
+        │   └───scss
+        │       │   home.scss
+        │       │   style.scss
+        │       │   _color.scss
+        │       │   _common.scss
+        │       │   _media-query.scss
+        │       │   _typography.scss
+        │       │   _variables.scss
+        │       │   
+        │       └───templates
+        │               _404.scss
+        │               _about.scss
+        │               _backgrounds.scss
+        │               _contact.scss
+        │               _counter.scss
+        │               _footer.scss
+        │               _header.scss
+        │               _instagram.scss
+        │               _navigation.scss
+        │               _pages.scss
+        │               _pricing.scss
+        │               _products.scss
+        │               _shopping.scss
+        │               _single-product.scss
+        │               _slider.scss
+        │               
+        ├───layouts
+        │   │   .DS_Store
+        │   │   404.html
+        │   │   index.html
+        │   │   
+        │   ├───about
+        │   │       list.html
+        │   │       
+        │   ├───contact
+        │   │       list.html
+        │   │       
+        │   ├───faq
+        │   │       list.html
+        │   │       
+        │   ├───partials
+        │   │       footer.html
+        │   │       head.html
+        │   │       header.html
+        │   │       page-title.html
+        │   │       preloader.html
+        │   │       share.html
+        │   │       
+        │   ├───search
+        │   │       list.html
+        │   │       
+        │   └───_default
+        │           baseof.html
+        │           default.html
+        │           index.json
+        │           list.html
+        │           single.html
+        │           
+        └───static
+            │   .DS_Store
+            │   .htaccess
+            │   
+            └───plugins
+                │   .DS_Store
+                │   
+                ├───bootstrap
+                │       bootstrap.min.css
+                │       bootstrap.min.js
+                │       
+                ├───google-map
+                │       gmap.js
+                │       
+                ├───instafeed-js
+                │       instafeed.min.js
+                │       
+                ├───jQuery
+                │       jquery.min.js
+                │       
+                ├───search
+                │       fuse.min.js
+                │       mark.js
+                │       search.js
+                │       
+                ├───slick
+                │   │   ajax-loader.gif
+                │   │   slick-theme.css
+                │   │   slick.css
+                │   │   slick.min.js
+                │   │   
+                │   └───fonts
+                │           slick.eot
+                │           slick.svg
+                │           slick.ttf
+                │           slick.woff
+                │           
+                ├───SyoTimer
+                │       jquery.syotimer.min.js
+                │       
+                └───themify-icons
+                    │   themify-icons.css
+                    │   
+                    └───fonts
+                            themify.eot
+                            themify.svg
+                            themify.ttf
+                            themify.woff
+                            

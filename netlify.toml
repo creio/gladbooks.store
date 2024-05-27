@@ -1,0 +1,7 @@
+[build]
+  publish = "public"
+  functions = "functions" # Папка с функциями Netlify (если требуется)
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"

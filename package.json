@@ -1,0 +1,24 @@
+{
+  "name": "gladbooks.store",
+  "version": "1.0.0",
+  "description": "books shop",
+  "engines": {
+    "node": ">=16.20.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "dev": "hugo server --bind=0.0.0.0 --disableFastRender",
+    "build": "hugo --gc --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/creio/gladbooks.store.git"
+  },
+  "keywords": [
+    "hugo"
+  ], 
+  "author": "@cretm",
+  "license": "MIT",
+  "homepage": "https://github.com/creio/gladbooks.store#readme"
+}

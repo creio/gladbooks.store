@@ -1,0 +1,97 @@
+<!--Контейнер, в котором будет отображаться платежная форма-->
+<div id="payment-form"></div>
+
+<script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"></script>
+<script>
+const shopId = '393031';
+const orderId = '123';
+const secretKey = 'test_2BAE98bFU8cxdkKWw2-UUM1BdLklaeavoTFez0oGjc';
+
+const url = 'https://api.yookassa.ru/v3/payments/tokens'; // URL для запроса confirmation_token
+
+const data = {
+  'amount': { 'value': 100, 'currency': 'RUB' }, // Сумма заказа
+  'confirmation': { 'type': 'embedded' }, // Параметры подтверждения оплаты
+  'description': 'Описание вашего заказа ' + orderId,
+  'capture': true,
+  'metadata': { 'orderId': orderId } // Дополнительная метаинформация
+};
+
+const timestamp = Math.floor(Date.now() / 1000);
+const headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Basic ' + btoa(`${shopId}:${secretKey}`),
+  'X-Request-ID': orderId,
+  'X-Idempotency-Key': orderId + timestamp,
+  'Date': new Date(timestamp * 1000).toUTCString()
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+    .then(response => response.json())
+    .then(response => {
+        const confirmationToken = response.confirmation.confirmation_token;
+        console.log(confirmationToken);
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+
+
+// const amount =
+//Инициализация виджета. Все параметры обязательные.
+const checkout = new window.YooMoneyCheckoutWidget({
+    confirmation_token: '{{ .Get 0 }}',
+    // return_url: 'http://localhost:1313/success', //Ссылка на страницу завершения оплаты
+
+    customization: {
+      modal: false,
+      //Настройка цветовой схемы, минимум один параметр, значения цветов в HEX
+      colors: {
+        //Цвет акцентных элементов: кнопка Заплатить, выбранные переключатели, опции и текстовые поля
+        control_primary: '#fb5c42', //Значение цвета в HEX
+        //Цвет платежной формы и ее элементов
+        background: '#F2F3F5' //Значение цвета в HEX
+      }
+    },
+    error_callback: function(error) {
+        console.log(error)
+    }
+});
+
+checkout.on('success', () => {
+  //Код, который нужно выполнить после успешной оплаты.
+  localStorage.setItem("cart", "[]");
+  localStorage.setItem("addons", "[]");
+  localStorage.setItem("ordernumber", "");
+  // console.log(JSON.parse(localStorage.getItem("cart")));
+
+  //Удаление инициализированного виджета
+  checkout.destroy();
+});
+
+checkout.on('fail', () => {
+  //Код, который нужно выполнить после неудачной оплаты.
+
+  //Удаление инициализированного виджета
+  checkout.destroy();
+});
+
+////Отображение платежной формы в модальном окне
+// checkout.render()
+// //Метод возвращает Promise, исполнение которого говорит о полной загрузке платежной формы (можно не использовать).
+//   .then(() => {
+//      console.log('init form')
+// });
+
+// checkout.on('modal_close', () => {
+//   //Код, который нужно выполнить после закрытия всплывающего окна.
+
+// });
+
+//Отображение платежной формы в контейнере
+checkout.render('payment-form');
+</script>
