@@ -7,8 +7,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "dev": "hugo server --bind=0.0.0.0 --disableFastRender",
-    "build": "hugo --gc --minify",
+    "dev": "exec-bin node_modules/.bin/hugo/hugo server --bind=0.0.0.0 --disableFastRender",
+    "build": "exec-bin node_modules/.bin/hugo/hugo --gc --minify",
+    "create": "exec-bin node_modules/.bin/hugo/hugo new",
+    "postinstall": "hugo-installer --version otherDependencies.hugo --extended --destination node_modules/.bin/hugo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,8 +19,15 @@
   },
   "keywords": [
     "hugo"
-  ], 
+  ],
   "author": "@cretm",
   "license": "MIT",
-  "homepage": "https://github.com/creio/gladbooks.store#readme"
+  "homepage": "https://github.com/creio/gladbooks.store#readme",
+  "devDependencies": {
+    "exec-bin": "^1.0.0",
+    "hugo-installer": "^4.0.1"
+  },
+  "otherDependencies": {
+    "hugo": "0.126.0"
+  }
 }
