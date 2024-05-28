@@ -13,17 +13,26 @@
             <div class="product">
               <div class="product-wrap">
                 <a href="{{ .RelPermalink }}">
-                  {{ range $image, $items := .Params.Images }}
-                  {{ if eq $image 0 }}<img class="img-fluid w-100 mb-3 img-first" src="{{ . | relURL }}" />{{ end }}
-                  {{ if eq $image 1 }}<img class="img-fluid w-100 mb-3 img-second" src="{{ . | relURL }}" />{{ end }}
+                  {{ with .Params.Images }}
+                  {{ range $image, $items := . }}
+                  {{ if eq $image 0 }}
+                  <img class="img-fluid w-100 mb-3 img-first" src="{{ $items | relURL }}" />
+                  {{ end }}
+                  {{ if eq $image 1 }}
+                  <img class="img-fluid w-100 mb-3 img-second" src="{{ $items | relURL }}" />
+                  {{ end }}
+                  {{ end }}
+                  {{ else }}
+                  <img class="img-fluid w-100 mb-3 img-first" src="/images/products/book.png" />
                   {{ end }}
                 </a>
               </div>
               {{ if .Params.PriceBefore }}
-              <span class="onsale">Sale</span>
+              <span class="onsale">Скидка</span>
               {{ end }}
+
+              {{/*}}
               <div class="product-hover-overlay">
-                {{/*}}
                 <button class="snipcart-add-item"
                   data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
                   data-item-name="{{ .Title }}"
@@ -39,7 +48,6 @@
                   data-item-custom2-name="Choose Size"
                   data-item-custom2-options="{{ range $index, $element:= .Params.Sizes }}{{ if eq $index 0 }}{{ . | title | upper }}{{ else }}|{{ . | title | upper }}{{ end }}{{ end }}"
                   {{ end }}><i class="ti-shopping-cart-full"></i></button>
-                {{*/}}
 
                 <button type="submit" class=""
                   data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
@@ -54,11 +62,12 @@
                   <i class="ti-shopping-cart-full"></i>
                 </button>
               </div>
+              {{*/}}
 
               <div class="product-info">
                 <h2 class="product-title h5 mb-0"><a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a></h2>
                 <span class="price">
-                  {{ site.Params.currency }}{{ with .Params.variants }}{{ (index . 0).price }}{{ else }}{{ .Params.Price | default 0 }}{{ end }}
+                  {{ with .Params.variants }}{{ (index . 0).price }}{{ else }}{{ .Params.Price | default 0 }}{{ end }} {{ site.Params.currency }}
                 </span>
               </div>
             </div>
@@ -71,7 +80,7 @@
       </div>
       <div class="col-md-3">
         <section class="widget widget-categories mb-5">
-          <h3 class="widget-title h4 mb-4">Categories</h3>
+          <h3 class="widget-title h4 mb-4">Категории</h3>
           {{- if isset site.Taxonomies "categories" }}
           {{- if not (eq (len site.Taxonomies.categories) 0) }}
           <ul class="list-unstyled">
@@ -85,6 +94,24 @@
           {{- end }}
           {{- end }}
         </section>
+
+        {{- if isset site.Taxonomies "formats" }}
+        {{- if not (eq (len site.Taxonomies.formats) 0) }}
+        <section class="widget widget-categories mb-5">
+          <h3 class="widget-title h4 mb-4">Форматы</h3>
+          <ul class="list-unstyled">
+            {{- range $name, $items := site.Taxonomies.formats }}
+            <li>
+              <a class="cat-item d-lg-flex justify-content-between text-dark"
+                href="{{ `formats/` | relLangURL }}{{ $name | urlize | lower }}">{{ $name | title | humanize }}<span>{{len $items}}</span></a>
+            </li>
+            {{ end }}
+          </ul>
+        </section>
+        {{- end }}
+        {{- end }}
+
+        {{/*}}
         <section class="widget widget-categories mb-5">
           <h3 class="widget-title h4 mb-4">Colors</h3>
           {{- if isset site.Taxonomies "colors" }}
@@ -100,6 +127,7 @@
           {{- end }}
           {{- end }}
         </section>
+
         <section class="widget widget-categories mb-5">
           <h3 class="widget-title h4 mb-4">Sizes</h3>
           {{- if isset site.Taxonomies "sizes" }}
@@ -115,6 +143,8 @@
           {{- end }}
           {{- end }}
         </section>
+        {{*/}}
+
       </div>
     </div>
   </div>

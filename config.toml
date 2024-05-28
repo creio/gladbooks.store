@@ -1,11 +1,11 @@
 ######################## default configuration ####################
-baseURL = "https://happyreading.ru"
-languageCode = "en-us"
+baseURL = "https://gladbooks.ru"
+languageCode = "ru-Ru"
 title = "Adrian Hugo | E-commerce template"
 theme = "adrian-hugo"
 summaryLength = "20"
 paginate = 6
-disqusShortname = "themefisher-template"    #get your shortname form : disqus.com
+# disqusShortname = "themefisher-template"    #get your shortname form : disqus.com
 # google analytics
 googleAnalytics = "" # example : UA-123-45
 
@@ -16,6 +16,7 @@ home = ["HTML", "AMP", "RSS", "JSON"]
 ############################# Taxonomies ###########################
 [taxonomies]
 category = "categories"
+format = "formats"
 color = "colors"
 size = "sizes"
 
@@ -58,12 +59,12 @@ link = "plugins/search/search.js"
 
 # main menu
 [[menu.main]]
-name = "Shop"
+name = "Магазин"
 URL = "shop/"
 weight = 1
 
 [[menu.main]]
-name = "About"
+name = "О нас"
 URL = "about/"
 weight = 2
 
@@ -73,40 +74,30 @@ URL = "faq/"
 weight = 3
 
 [[menu.main]]
-name = "Contact"
+name = "Контакты"
 URL = "contact/"
 weight = 4
 
 
 # category menu
 [[menu.category]]
-name = "Bag"
-URL = "categories/bag/"
-weight = 1
+name = "Олкотт"
+URL = "categories/олкотт/"
+weight = 10
 
 [[menu.category]]
-name = "Shirt"
-URL = "categories/shirt/"
-weight = 2
-
-[[menu.category]]
-name = "Shoe"
-URL = "categories/shoe/"
-weight = 3
-
-[[menu.category]]
-name = "Tops"
-URL = "categories/tops/"
-weight = 4
+name = "Портер"
+URL = "categories/портер/"
+weight = 20
 
 # useful links
 [[menu.useful_links]]
-name = "Shop"
+name = "Магазин"
 URL = "shop/"
 weight = 1
 
 [[menu.useful_links]]
-name = "About"
+name = "О нас"
 URL = "about/"
 weight = 2
 
@@ -116,42 +107,40 @@ URL = "faq/"
 weight = 3
 
 [[menu.useful_links]]
-name = "Contact"
+name = "Контакты"
 URL = "contact/"
 weight = 4
 
 # footer menu
 [[menu.footer]]
-name = "Privacy Policy"
+name = "Политика Конфиденциальности"
 URL = "privacy-policy/"
 weight = 1
 
 [[menu.footer]]
-name = "Terms & Conditions"
+name = "Условия использования"
 URL = "terms-conditions/"
 weight = 2
 
 [[menu.footer]]
-name = "Cookie Policy"
+name = "Политика использования файлов cookie"
 URL = "cookie-policy/"
 weight = 3
 
 [[menu.footer]]
-name = "Terms of Sale"
+name = "Условия продажи"
 URL = "terms-of-sale/"
 weight = 4
 
 #################### default parameters ################################
 [params]
 logo = "images/logo.png"
-home = "Home"
+home = "Главная"
 # Meta data
 description = "This is meta description"
-author = "Themefisher"
-yukassa_shop_id = "393031"
-yukassa_api_key = "test_2BAE98bFU8cxdkKWw2T-UUM1BdLklaeavoTFez0oGjc"
+# author = "Themefisher"
 # snipcart public api key
-snipcartAPI = "ZDgxY2ZiM2EtMWRmMi00M2ZkLWI1MDAtNzA2MDc0Y2Q1MzJlNjM3MTAzNDIwOTQ1NDA4NjM4"
+# snipcartAPI = "ZDgxY2ZiM2EtMWRmMi00M2ZkLWI1MDAtNzA2MDc0Y2Q1MzJlNjM3MTAzNDIwOTQ1NDA4NjM4"
 currency = "₽"
 # google map
 gmapAPI = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU&libraries=places"
@@ -169,7 +158,7 @@ contactFormAction = "#" # contact form works with : https://formspree.io
 # footer content
 footer_content = "Iste dolores iure quis excepturi, deserunt praesentium."
 # copyright
-copyright = "Designed By [Themefisher](https://themefisher.com/) & Developed By [Gethugothemes](https://gethugothemes.com/)"
+copyright = "Designed By [Themefisher](https://themefisher.com/) & Developed By [@creio](https://creio.ctlos.ru)"
 
 # Preloader
 [params.preloader]
@@ -182,15 +171,15 @@ enable = true
 
 # opening hours
 [[params.openingHour]]
-day = "Monday-Friday"
+day = "Понедельник-Пятница"
 time = "8.00-20.00"
 
 [[params.openingHour]]
-day = "Saturday"
+day = "Суббота"
 time = "10.00-20.00"
 
 [[params.openingHour]]
-day = "Sunday"
+day = "Воскресенье"
 time = "12.00-20.00"
 
 [markup.goldmark.renderer]

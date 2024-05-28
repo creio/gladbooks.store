@@ -9,7 +9,7 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ site.BaseURL }}">{{ site.Params.home }}</a></li>
-            <li class="breadcrumb-item"><a href="{{`shop` | relURL}}">Shop</a></li>
+            <li class="breadcrumb-item"><a href="{{`shop` | relURL}}">Магазин</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ .Title | markdownify }}</li>
           </ol>
         </nav>
@@ -19,8 +19,9 @@
     <div class="row mt-5 mt-lg-0">
       {{ if .Params.Images }}
       <div class="col-md-5">
-        <div class="single-product-slider">
-          {{ range .Params.Images }}
+        {{ $items := .Params.Images }}
+        <div class="{{ if ne (len $items) 1}}single-product-slider{{ end }}">
+          {{ range $items }}
           <div data-image="{{ . | relURL }}">
             <img class="img-fluid w-100" src="{{ . | relURL }}" alt="product-img">
           </div>
@@ -42,8 +43,8 @@
           <hr>
 
           <h3 class="product-price">
-            {{ site.Params.currency }}<span class="productprice">{{ .Params.Price}}</span>
-            {{ if .Params.PriceBefore }}<del>{{ site.Params.currency }}{{ .Params.PriceBefore }}</del>{{ end }}
+            <span class="productprice">{{ .Params.Price}}</span> {{ site.Params.currency }}
+            {{ if .Params.PriceBefore }}<del>{{ .Params.PriceBefore }} {{ site.Params.currency }}</del>{{ end }}
           </h3>
 
           <p class="product-description my-4">
@@ -53,41 +54,48 @@
           <div class="products-meta mt-4">
             {{ if .Params.Categories }}
             <div class="product-category d-flex align-items-center">
-              <span class="font-weight-bold text-capitalize product-meta-title">Category :</span>
+              <span class="font-weight-bold text-capitalize product-meta-title">Категории:</span>
               {{ range $index, $element:= .Params.Categories }}{{ if eq $index 0 }}{{ . | title | humanize }}{{ else }}, {{ . | title | humanize }}{{ end }}{{ end }}
             </div>
             {{ end }}
-            {{ if .Params.Colors }}
+            {{ if .Params.Formats }}
             <div class="product-category d-flex align-items-center">
-              <span class="font-weight-bold text-capitalize product-meta-title">Color :</span>
-              {{ range $index, $element:= .Params.Colors }}{{ $name:= replace . "[" " " }}{{ $name:= replace $name "]" "$" }}{{ if eq $index 0 }}{{ $name | title | humanize }}{{ else }}, &nbsp; {{ $name | title | humanize }}{{ end }}{{ end }}
+              <span class="font-weight-bold text-capitalize product-meta-title">Форматы:</span>
+              {{ range $index, $element:= .Params.Formats }}{{ $name:= replace . "[" " " }}{{ $name:= replace $name "]" "$" }}{{ if eq $index 0 }}{{ $name | title | humanize }}{{ else }}, &nbsp; {{ $name | title | humanize }}{{ end }}{{ end }}
             </div>
             {{ end }}
-            {{ if .Params.Sizes }}
-            <div class="product-category d-flex align-items-center">
-              <span class="font-weight-bold text-capitalize product-meta-title">Size :</span>
-              {{ range $index, $element:= .Params.Sizes }}{{ $name:= replace . "[" " " }}{{ $name:= replace $name "]" "$" }}{{ if eq $index 0 }}{{ $name | title | upper }}{{ else }}, &nbsp; {{ $name | title | upper }}{{ end }}{{ end }}
-            </div>
-            {{ end }}
-            <h5 class="mt-4">[Varient can be select after add to cart]</h5>
+
             {{/*}}
-            <button class="snipcart-add-item btn btn-main btn-small mt-5"
-              data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
-              data-item-name="{{ .Title }}"
-              data-item-image="{{ with .Params.Images }} {{ range first 1 .}} {{ . | relURL }}{{ end }}{{ end }}"
-              data-item-price="{{ .Params.Price }}"
-              data-item-url="{{ .RelPermalink }}"
-              data-item-description="{{ .Params.Description | markdownify }}"
               {{ if .Params.Colors }}
-              data-item-custom1-name="Choose Color"
-              data-item-custom1-options="{{ range $index, $element:= .Params.Colors }}{{ if eq $index 0 }}{{ . | title }}{{ else }}|{{ . | title }}{{ end }}{{ end }}"
+              <div class="product-category d-flex align-items-center">
+                <span class="font-weight-bold text-capitalize product-meta-title">Color :</span>
+                {{ range $index, $element:= .Params.Colors }}{{ $name:= replace . "[" " " }}{{ $name:= replace $name "]" "$" }}{{ if eq $index 0 }}{{ $name | title | humanize }}{{ else }}, &nbsp; {{ $name | title | humanize }}{{ end }}{{ end }}
+              </div>
               {{ end }}
               {{ if .Params.Sizes }}
-              data-item-custom2-name="Choose Size"
-              data-item-custom2-options="{{ range $index, $element:= .Params.Sizes }}{{ if eq $index 0 }}{{ . | title | upper }}{{ else }}|{{ . | title | upper }}{{ end }}{{ end }}"
-              {{ end }}>
-              Add to cart
-            </button>
+              <div class="product-category d-flex align-items-center">
+                <span class="font-weight-bold text-capitalize product-meta-title">Size :</span>
+                {{ range $index, $element:= .Params.Sizes }}{{ $name:= replace . "[" " " }}{{ $name:= replace $name "]" "$" }}{{ if eq $index 0 }}{{ $name | title | upper }}{{ else }}, &nbsp; {{ $name | title | upper }}{{ end }}{{ end }}
+              </div>
+              {{ end }}
+              <h5 class="mt-4">[Varient can be select after add to cart]</h5>
+              <button class="snipcart-add-item btn btn-main btn-small mt-5"
+                data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
+                data-item-name="{{ .Title }}"
+                data-item-image="{{ with .Params.Images }} {{ range first 1 .}} {{ . | relURL }}{{ end }}{{ end }}"
+                data-item-price="{{ .Params.Price }}"
+                data-item-url="{{ .RelPermalink }}"
+                data-item-description="{{ .Params.Description | markdownify }}"
+                {{ if .Params.Colors }}
+                data-item-custom1-name="Choose Color"
+                data-item-custom1-options="{{ range $index, $element:= .Params.Colors }}{{ if eq $index 0 }}{{ . | title }}{{ else }}|{{ . | title }}{{ end }}{{ end }}"
+                {{ end }}
+                {{ if .Params.Sizes }}
+                data-item-custom2-name="Choose Size"
+                data-item-custom2-options="{{ range $index, $element:= .Params.Sizes }}{{ if eq $index 0 }}{{ . | title | upper }}{{ else }}|{{ . | title | upper }}{{ end }}{{ end }}"
+                {{ end }}>
+                Add to cart
+              </button>
             {{*/}}
 
             <form action="{{ with .Site.GetPage `cart.md` }}{{ .RelPermalink }}{{ end }}" onsubmit="return addToCart(this)">
@@ -105,14 +113,20 @@
               <button type="submit" class="btn btn-main btn-small mt-5"
                 data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
                 data-url="{{ .RelPermalink }}"
+                data-sku="{{ .Title | urlize }}_{{ .Params.Price }}"
+                {{/*}}
                 data-sku="{{ with .Params.variants }}{{ (index . 0).sku }}{{ else }}default{{ end }}"
+                {{*/}}
                 data-title="{{ .Title }}"
                 data-varianttype="{{ .Params.variant_type }}"
+                data-variantname="{{ .Title | urlize }}"
+                {{/*}}
                 data-variantname="{{ (index .Params.variants 0).name }}"
+                {{*/}}
                 data-price="{{ with .Params.variants }}{{ (index . 0).price }}{{ else }}{{ .Params.Price | default 0 }}{{ end }}"
                 data-item-price="{{ .Params.Price }}"
                 data-image="/{{ index .Params.images 0 }}">
-                Add to cart
+                В корзину
               </button>
             </form>
 
@@ -128,11 +142,13 @@
         <nav class="product-info-tabs wc-tabs mt-5 mb-5">
           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-              aria-controls="nav-home" aria-selected="true">Description</a>
+              aria-controls="nav-home" aria-selected="true">Описание</a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-              aria-controls="nav-profile" aria-selected="false">Additional Information</a>
+              aria-controls="nav-profile" aria-selected="false">Дополнительная информация</a>
+            {{ if .Site.Config.Services.Disqus.Shortname }}
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-              aria-controls="nav-contact" aria-selected="false">Reviews</a>
+              aria-controls="nav-contact" aria-selected="false">Отзывы</a>
+            {{ end }}
           </div>
         </nav>
 
@@ -163,6 +179,13 @@
               </li>
               {{ end }}
 
+              {{ if .Params.Formats }}
+              <li class="d-flex">
+                <strong>Форматы </strong>
+                <span>{{ range $index, $element:= .Params.Formats }}{{ $name:= replace . "[" " " }}{{ $name:= replace $name "]" "$" }}{{ if eq $index 0 }}{{ $name | title | humanize }}{{ else }}, &nbsp; {{ $name | title | humanize }}{{ end }}{{ end }}</span>
+              </li>
+              {{ end }}
+
               {{ if .Params.Colors }}
               <li class="d-flex">
                 <strong>Color </strong>
@@ -178,9 +201,11 @@
               {{ end }}
             </ul>
           </div>
+          {{ if .Site.Config.Services.Disqus.Shortname }}
           <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
             {{ template "_internal/disqus.html" . }}
           </div>
+          {{ end }}
         </div>
       </div>
     </div>

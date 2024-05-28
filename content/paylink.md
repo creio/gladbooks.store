@@ -21,4 +21,4 @@ customer_note: test note
 
 <a href=https://yookassa.ru/developers/payment-acceptance/testing-and-going-live/testing#test-bank-card>Другие тестовые банковские карты</a>
 
-{{< yukassa-widget "ct-2de576ed-000f-5000-9000-1802fac93785" >}}
+{{< yukassa-widget >}}

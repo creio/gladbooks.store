@@ -16,7 +16,7 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
-          <input type="email" placeholder="email" class="form-control" name="email" id="email" required>
+          <input type="email" placeholder="name@example.com" class="form-control" name="email" id="email" required>
         </div>
       </div>
     </div>
@@ -24,77 +24,86 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
-          <input type="text" placeholder="Страна" class="form-control" name="country" id="country" required>
+          <input type="phone" placeholder="+7 925 111-11-11" class="form-control" name="phone" id="phone" required>
         </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="form-group">
-          <input type="text" placeholder="Город" class="form-control" name="city" id="city" required>
+    {{/*}}
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <input type="text" placeholder="Страна" class="form-control" name="country" id="country" required>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="form-group">
-          <input type="text" placeholder="Индекс (zip)" class="form-control" name="zipcode" id="zipcode" required>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <input type="text" placeholder="Город" class="form-control" name="city" id="city" required>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="form-group">
-          <input type="text" placeholder="Адрес" class="form-control" name="address" id="address" required>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <input type="text" placeholder="Индекс (zip)" class="form-control" name="zipcode" id="zipcode" required>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div>
-      <label for="shipping">Доставка</label>
-      <select name="shipping" required onchange="if(this.value == 'NL') document.querySelector('input[name=\'country\']').value = 'The Netherlands'; else document.querySelector('input[name=\'country\']').value = ''">
-        <option value=""></option>
-        <option value="NL" data-title="Доставка RU">По России (+ 0 ₽)</option>
-        <option value="EU" data-title="Доставка EU" data-price="300">В Европу (+ 300 ₽)</option>
-        <option value="World" data-title="Доставка World" data-price="1000">По миру (+ 1000 ₽)</option>
-      </select>
-    </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <input type="text" placeholder="Адрес" class="form-control" name="address" id="address" required>
+          </div>
+        </div>
+      </div>
 
-    <div>
-      <label>Подарочная упаковка:</label><br>
-      <label><input type="radio" name="wrapped" value="no" required> Не в подарочной упаковке</label><br>
-      <label><input type="radio" name="wrapped" data-title="Подарочная упаковка" value="yes" data-price="100" required> В подарочной упаковке (+ 100.00 ₽)</label>
-    </div>
+      <div>
+        <label for="shipping">Доставка</label>
+        <select class="form-select" aria-label="Default select example" name="shipping" required onchange="if(this.value == 'NL') document.querySelector('input[name=\'country\']').value = 'The Netherlands'; else document.querySelector('input[name=\'country\']').value = ''">
+          <option selected value="RU" data-title="Доставка RU">По России (+ 0 ₽)</option>
+          <option value="EU" data-title="Доставка EU" data-price="300">В Европу (+ 300 ₽)</option>
+          <option value="World" data-title="Доставка World" data-price="1000">По миру (+ 1000 ₽)</option>
+        </select>
+      </div>
 
-    <div class="form-group">
-      <textarea rows="6" placeholder="Сообщение" class="form-control" name="message" id="message"></textarea>
-    </div>
+      <div>
+        <label>Подарочная упаковка:</label><br>
+        <label><input type="radio" name="wrapped" value="no" required> Не в подарочной упаковке</label><br>
+        <label><input type="radio" name="wrapped" data-title="Подарочная упаковка" value="yes" data-price="100" required> В подарочной упаковке (+ 100.00 ₽)</label>
+      </div>
 
-    <div class="mt-4 submitbutton">
-      <a href="{{ with .Site.GetPage `cart.md` }}{{ .RelPermalink }}{{ end }}" class="gray">Вернуться в корзину</a>
+      <div class="form-group">
+        <textarea class="form-control" rows="4" placeholder="Сообщение" name="message" id="message"></textarea>
+      </div>
+    {{*/}}
+
+    <div class="submitbutton d-flex justify-content-between align-items-center mt-4">
+      <a href="{{ with .Site.GetPage `cart.md` }}{{ .RelPermalink }}{{ end }}" class="gray"><span class="ti-arrow-left"></span> Вернуться в корзину</a>
       <input class="btn btn-black btn-small" type="submit" value="Перейти к оплате" onclick="setOrderNumber(this.parentNode.parentNode);" />
     </div>
 
   </form>
   <div>
     <!-- <label style="padding-top: 0.8rem;">Payment total</label> -->
-    <div id="checkoutcalculation">
+    <div id="checkoutcalculation" class="text-right mt-4">
       <span>Корзина: </span>0.00 {{ .Site.Params.currency }}
     </div>
-    <p><em>{{ .Get 0 }}</em></p>
+    <p class="mt-4"><em>{{ .Get 0 }}</em></p>
   </div>
 </div>
 
 
-<div class="checkout_progress">
+<div class="checkout_progress mt-4">
   <ul id="checkout_progress">
     <li class="past">
       <span><a href="{{ with .Site.GetPage `cart.md` }}{{ .RelPermalink }}{{ end }}">Корзина</a></span>
     </li>
-    <li class="current"><span><a href="#">Оформление заказа</a></span></li>
+    <li class="current"><span><a href="#">Заказ</a></span></li>
     <li><span><span>Оплата</span></span></li>
   </ul>
 </div>

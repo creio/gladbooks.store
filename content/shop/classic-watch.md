@@ -22,13 +22,6 @@ price: "88.00"
 priceBefore: "100"
 
 variant_type: book
-variants:
-- name: half-mp3
-  price: 90
-  sku: halfmp3
-- name: pint
-  price: 70
-  sku: beerpint
 
 # colors 
 colors : ["white","black"]
