@@ -9,6 +9,7 @@
         <div class="row">
           {{ $paginator := .Paginate .Data.Pages }}
           {{ range $paginator.Pages }}
+          {{- if ne .Params.type "cart" }}
           <div class="col-lg-4 col-12 col-md-6 col-sm-6 mb-5">
             <div class="product">
               <div class="product-wrap">
@@ -72,6 +73,7 @@
               </div>
             </div>
           </div>
+          {{- end }}
           {{ end }}
           <div class="col-12">
             {{ template "_internal/pagination.html" . }}

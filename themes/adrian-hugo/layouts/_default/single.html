@@ -43,7 +43,7 @@
           <hr>
 
           <h3 class="product-price">
-            <span class="productprice">{{ .Params.Price}}</span> {{ site.Params.currency }}
+            <span class="productprice">{{ with .Params.variants }}{{ (index . 0).price }}{{ else }}{{ .Params.Price}}{{ end }}</span> {{ site.Params.currency }}
             {{ if .Params.PriceBefore }}<del>{{ .Params.PriceBefore }} {{ site.Params.currency }}</del>{{ end }}
           </h3>
 
@@ -99,12 +99,34 @@
             {{*/}}
 
             <form action="{{ with .Site.GetPage `cart.md` }}{{ .RelPermalink }}{{ end }}" onsubmit="return addToCart(this)">
+              {{/*}}
               {{ if (index .Params.variants 1).name }}
-              <div>
-                <label for="variant">Choose a {{ .Params.variant_type }}:</label>
-                <select onchange="updateBuyButton(this)" id="variant" name="variant">
+              <div class="form-group">
+                <label for="variant" class="font-weight-bold">Выбрать формат:</label>
+                <select onchange="updateBuyButton(this)" id="variant" name="variant" class="form-control" aria-label="Default select example" required>
                 {{ range $variants :=.Params.variants }}
-                <option data-sku="{{ $variants.sku }}" data-variantname="{{ $variants.name }}" data-price="{{ $variants.price }}">{{ $variants.name }}</option>
+                <option data-sku="{{ $variants.sku }}"
+                  data-variantname="{{ $variants.name }}"
+                  data-price="{{ $variants.price }}">
+                  {{ $variants.name }}
+                </option>
+                {{ end }}
+                </select>
+              </div>
+              {{ end }}
+              {{*/}}
+
+              {{ if (index .Params.variants 0).name }}
+              {{ $.Scratch.Set "title" .Title }}
+              <div class="form-group {{ if not (index .Params.variants 1).name }}d-none{{ end }}">
+                <label for="variant" class="font-weight-bold">Выбрать формат:</label>
+                <select onchange="updateBuyButton(this)" id="variant" name="variant" class="form-control" aria-label="Default select example" required>
+                {{ range .Params.variants }}
+                <option data-sku="{{ .sku }}_{{ $.Scratch.Get "title" | urlize }}"
+                  data-variantname="{{ .name }}"
+                  data-price="{{ .price }}">
+                  {{ .name }}
+                </option>
                 {{ end }}
                 </select>
               </div>
@@ -113,18 +135,18 @@
               <button type="submit" class="btn btn-main btn-small mt-5"
                 data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
                 data-url="{{ .RelPermalink }}"
-                data-sku="{{ .Title | urlize }}_{{ .Params.Price }}"
                 {{/*}}
-                data-sku="{{ with .Params.variants }}{{ (index . 0).sku }}{{ else }}default{{ end }}"
+                data-sku="{{ .Title | urlize }}_{{ .Params.Price }}"
                 {{*/}}
+                data-sku="{{ with .Params.variants }}{{ (index . 0).sku }}{{ else }}default{{ end }}_{{ .Title | urlize }}"
                 data-title="{{ .Title }}"
                 data-varianttype="{{ .Params.variant_type }}"
-                data-variantname="{{ .Title | urlize }}"
                 {{/*}}
-                data-variantname="{{ (index .Params.variants 0).name }}"
+                data-variantname="{{ .Title | urlize }}"
                 {{*/}}
+                data-variantname="{{ with .Params.variants }}{{ (index . 0).name | urlize }}{{ else }}e-books{{ end }}"
                 data-price="{{ with .Params.variants }}{{ (index . 0).price }}{{ else }}{{ .Params.Price | default 0 }}{{ end }}"
-                data-item-price="{{ .Params.Price }}"
+                data-item-price="{{ with .Params.variants }}{{ (index . 0).price }}{{ else }}{{ .Params.Price | default 0 }}{{ end }}"
                 data-image="/{{ index .Params.images 0 }}">
                 В корзину
               </button>

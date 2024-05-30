@@ -1,7 +1,8 @@
-node_modules
-public
-resources
 .netlify
 .idea
 .vscode
+node_modules
+resources
+public
+backend
 .env

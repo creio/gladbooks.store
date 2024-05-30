@@ -231,10 +231,16 @@ textarea.form-control{
 
 
 
+.text-brand {
+    color: $primary-color;
+}
 .text-gray {
     color: #898a8f;
 }
 
+.bg-brand {
+    background: $primary-color;
+}
 .bg-gray {
     background: $secondary-color;
 }

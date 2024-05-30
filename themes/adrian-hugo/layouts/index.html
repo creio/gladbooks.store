@@ -68,6 +68,7 @@
 
     <div class="row">
       {{ range first 8 site.RegularPages }}
+      {{- if ne .Params.type "cart" }}
       <div class="col-lg-3 col-12 col-md-6 col-sm-6 mb-5">
         <div class="product">
           <div class="product-wrap">
@@ -79,8 +80,10 @@
             </a>
           </div>
           {{ if .Params.PriceBefore }}
-          <span class="onsale">Sale</span>
+          <span class="onsale">Скидка</span>
           {{ end }}
+
+          {{/*}}
           <div class="product-hover-overlay">
             <button class="snipcart-add-item"
               data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
@@ -99,15 +102,17 @@
               {{ end }}>
               <i class="ti-shopping-cart-full"></i></button>
           </div>
+          {{*/}}
 
           <div class="product-info">
             <h2 class="product-title h5 mb-0"><a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a></h2>
             <span class="price">
-              {{ site.Params.currency }}{{ .Params.Price }}
+              {{ with .Params.variants }}{{ (index . 0).price }}{{ else }}{{ .Params.Price | default 0 }}{{ end }} {{ site.Params.currency }}
             </span>
           </div>
         </div>
       </div>
+      {{- end }}
       {{ end }}
     </div>
   </div>

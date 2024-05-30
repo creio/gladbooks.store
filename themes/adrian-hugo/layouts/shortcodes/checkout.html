@@ -1,3 +1,15 @@
+<p class="mt-0"><em>{{ .Get 0 }}</em></p>
+
+<div class="checkout_progress my-4">
+  <ul id="checkout_progress">
+    <li class="past">
+      <span><a href="{{ with .Site.GetPage `cart.md` }}{{ .RelPermalink }}{{ end }}">Корзина</a></span>
+    </li>
+    <li class="current"><span><a href="#">Заказ</a></span></li>
+    <li><span><span>Оплата</span></span></li>
+  </ul>
+</div>
+
 <div id="checkout">
   <form action="/shop/paylink/" method="post" onchange="setAddons(this)">
     <input name="_gotcha" style="display:none" type="text">
@@ -88,22 +100,11 @@
     </div>
 
   </form>
+
   <div>
     <!-- <label style="padding-top: 0.8rem;">Payment total</label> -->
-    <div id="checkoutcalculation" class="text-right mt-4">
+    <div id="checkoutcalculation" class="font-weight-bold text-right mt-3">
       <span>Корзина: </span>0.00 {{ .Site.Params.currency }}
     </div>
-    <p class="mt-4"><em>{{ .Get 0 }}</em></p>
   </div>
-</div>
-
-
-<div class="checkout_progress mt-4">
-  <ul id="checkout_progress">
-    <li class="past">
-      <span><a href="{{ with .Site.GetPage `cart.md` }}{{ .RelPermalink }}{{ end }}">Корзина</a></span>
-    </li>
-    <li class="current"><span><a href="#">Заказ</a></span></li>
-    <li><span><span>Оплата</span></span></li>
-  </ul>
 </div>

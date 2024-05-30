@@ -69,4 +69,26 @@
   }
 
 
+  // Заменяемый элемент
+  var element = document.getElementById('navbar');
+
+  // Обработчик события прокрутки
+  window.addEventListener('scroll', function() {
+    // Проверяем, сколько прокручено вверх от верхней части страницы
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
+    // Задаем пороговое значение для замены класса
+    var scrollThreshold = 200;
+
+    // Если прокрутка превысила пороговое значение, меняем класс элемента
+    if (scrollTop > scrollThreshold) {
+      element.classList.remove('sticky-top');
+      element.classList.add('fixed-top');
+    } else {
+      element.classList.remove('fixed-top');
+      element.classList.add('sticky-top');
+    }
+  });
+
+
 })(jQuery);

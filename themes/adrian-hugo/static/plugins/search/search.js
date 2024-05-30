@@ -14,6 +14,7 @@ var fuseOptions = {
     { name: "colors", weight: 0.3 },
     { name: "sizes", weight: 0.3 },
     { name: "categories", weight: 0.3 },
+    { name: "formats", weight: 0.3 },
   ],
 };
 
@@ -32,7 +33,7 @@ function executeSearch(searchQuery) {
       populateResults(result);
     } else {
       $("#search-results").append(
-        '<div class="text-center"><img class="img-fluid mb-5" src="https://user-images.githubusercontent.com/37659754/64060567-7cece400-cbf0-11e9-9cf9-abac3543ec1f.png"><h3>No Search Found</h3></div>'
+        '<div class="text-center"><img class="img-fluid mb-5" src="https://user-images.githubusercontent.com/37659754/64060567-7cece400-cbf0-11e9-9cf9-abac3543ec1f.png"><h3>Не найдено</h3></div>'
       );
     }
   });
@@ -47,7 +48,7 @@ function populateResults(result) {
       snippetHighlights.push(searchQuery);
     } else {
       $.each(value.matches, function (matchKey, mvalue) {
-        if (mvalue.key == "colors" || mvalue.key == "categories") {
+        if (mvalue.key == "formats" || mvalue.key == "categories") {
           snippetHighlights.push(mvalue.value);
         } else if (mvalue.key == "contents") {
           start =
@@ -75,10 +76,11 @@ function populateResults(result) {
     //pull template from hugo templarte definition
     var templateDefinition = $("#search-result-template").html();
     //replace values
+    console.log(value.item);
     var output = render(templateDefinition, {
       key: key,
       title: value.item.title,
-      link: value.item.RelPermalink,
+      link: value.item.permalink,
       colors: value.item.colors,
       sizes: value.item.sizes,
       categories: value.item.categories,

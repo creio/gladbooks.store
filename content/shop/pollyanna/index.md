@@ -25,6 +25,15 @@ categories : ["Портер"]
 formats : ["epub", "mobi", "pdf", "mp3"]
 
 variant_type: book
+variants:
+- name: e-books
+  price: "98.00"
+  sku: e-books
+- name: mp3
+  price: "120.30"
+  sku: mp3
+
+cloud_file_name: pollyanna
 ---
 
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.

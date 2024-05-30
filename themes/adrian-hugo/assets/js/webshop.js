@@ -18,8 +18,31 @@ function updateBuyButton(el) {
     el.closest('form').querySelector('button[type=\'submit\']').setAttribute('data-sku',el.options[el.selectedIndex].getAttribute('data-sku'));
     el.closest('form').querySelector('button[type=\'submit\']').setAttribute('data-variantname',el.options[el.selectedIndex].getAttribute('data-variantname'));
     el.closest('form').querySelector('button[type=\'submit\']').setAttribute('data-price',el.options[el.selectedIndex].getAttribute('data-price'));
-    
+    el.closest('form').querySelector('button[type=\'submit\']').setAttribute('data-item-price',el.options[el.selectedIndex].getAttribute('data-item-price'));
+
     updateProductPrice(el.closest('form').querySelector('button[type=\'submit\']').getAttribute('data-price'));
+
+    var cart = JSON.parse(localStorage.getItem("cart"));
+    var i;
+    var product_url = window.location.pathname;
+    // console.log(product_url);
+
+    if (cart !== null && cart.length) {
+        var button = document.querySelector('.products-meta button[type=\'submit\']');
+        var foundValue = cart.find(item => item.sku === button.getAttribute('data-sku'));
+
+        for (i = 0; i < cart.length; ++i) {
+          if (product_url == cart[i].url &&
+              foundValue !== undefined) {
+
+            button.disabled = true;
+            button.textContent = 'Уже в корзине';
+          } else {
+            button.disabled = false;
+            button.textContent = 'В корзину';
+          }
+        }
+    }
 }
 
 function updateProductPrice(price) {
@@ -64,13 +87,14 @@ function addToCart(el) {
 
     // increment quantity when sku exists
     var found = false;
-    var i;
+
+    /*var i;
     for (i = 0; i < cart.length; ++i) {
         if(cart[i].sku == el.querySelector('button[type=\'submit\']').getAttribute('data-sku')) {
             found = true;
             cart[i].quantity = cart[i].quantity + 1;
         }
-    }
+    }*/
 
     // add to cart array when sku does not exist
     if(!found) {
@@ -105,7 +129,7 @@ function populateCart() {
         for (i = 0; i < cart.length; ++i) {
             var newline = '<tr><td class="productavatar"><a href="'+cart[i].url+'" title="'+cart[i].title+'"><img class="" src="'+cart[i].image+'" alt="'+cart[i].title+'"></a></td><td><a class="" href="'+cart[i].url+'">'+cart[i].title+'</a>';
             // var newline = '<tr><td class="productavatar"><a href="'+cart[i].url+'" title="'+cart[i].sku+'"><img class="" src="'+cart[i].image+'" alt="'+cart[i].sku+'"></a></td><td><a class="" href="'+cart[i].url+'">'+cart[i].title+'</a>';
-            // if(cart[i].varianttype && cart[i].variantname) newline += '<br />'+capitalizeFirstLetter(cart[i].varianttype)+': '+cart[i].variantname;
+            if(cart[i].varianttype && cart[i].variantname) newline += '<br />'+capitalizeFirstLetter(cart[i].varianttype)+': '+cart[i].variantname;
             // newline += '<br />'+parseFloat(cart[i].price).toFixed(2)+' ₽</td><td><input class="quantity qty" type="number" value ="'+cart[i].quantity+'" min="0" max="99" onchange="updateQuantity(\''+cart[i].sku+'\',this.value)" /></td><td>'+(cart[i].quantity * cart[i].price).toFixed(2)+' ₽</td><td class="remove"><a href="javascript:removeFromCart(\''+cart[i].sku+'\');">Удалить</a></td></tr>';
             newline += '<br />'+parseFloat(cart[i].price).toFixed(2)+' ₽</td><td>'+(cart[i].quantity * cart[i].price).toFixed(2)+' ₽</td><td class="remove"><a href="javascript:removeFromCart(\''+cart[i].sku+'\');">Удалить</a></td></tr>';
             document.getElementById('shoppingcart').querySelector('tbody').innerHTML += newline;
@@ -258,7 +282,7 @@ function initCheckoutForm(el) {
     newinput.setAttribute('id',"products");
     var products = '';
     for (var i = 0; i < cart.length; i++) {
-      var products = cart[i].title + ' = ' +cart[i].price;
+      var products = cart[i].title + '(' +cart[i].variantname+ ')' + ' ' +parseFloat(cart[i].price).toFixed(2)+' ₽';
       if(i) newinput.setAttribute('value',newinput.getAttribute('value') + ' | ' + products);
       else newinput.setAttribute('value',products);
     }
@@ -344,57 +368,62 @@ if(document.getElementById('paymenttotal')) document.getElementById('paymenttota
 
 
 /* юкасса */
-var ordernumber = localStorage.getItem("ordernumber");
-var paymenttotal = parseFloat(getCartTotal() + getAddonTotal()).toFixed(2);
+function yooKassa () {
+  if (document.getElementById('payment-form')) {
+    var ordernumber = localStorage.getItem("ordernumber");
+    var paymenttotal = parseFloat(getCartTotal() + getAddonTotal()).toFixed(2);
 
-console.log(ordernumber);
-console.log(paymenttotal);
+    console.log(ordernumber);
+    console.log(paymenttotal);
 
-if (paymenttotal && paymenttotal !== '0.00') {
+    if (paymenttotal && paymenttotal !== '0.00') {
 
-  var formData = JSON.parse(localStorage.getItem("formData"));
-  var item;
+      var formData = JSON.parse(localStorage.getItem("formData"));
+      var item;
 
-  if (formData !== null && formData.length) {
-    for (var item = 0; item < formData.length; item++) {
-      var name = formData[item].name;
-      var email = formData[item].email;
-      var phone = formData[item].phone;
-      var products = formData[item].products;
+      if (formData !== null && formData.length) {
+        for (var item = 0; item < formData.length; item++) {
+          var name = formData[item].name;
+          var email = formData[item].email;
+          var phone = formData[item].phone;
+          var products = formData[item].products;
+        }
+      }
+
+      const requestData = {
+        name: name,
+        email: email,
+        phone: phone,
+        products: products,
+        price: paymenttotal,
+        ordernumber: ordernumber,
+      };
+
+      $.ajax({
+        url: 'https://gladbooks.ru/backend/yukassa.php',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(requestData),
+        contentType: 'application/json; charset=utf-8',
+        success: function(response) {
+          if (response.confirmationToken) {
+            let confirm_token = response.confirmationToken;
+            let payment_id = response.payId;
+            setToken(confirm_token, payment_id);
+          } else {
+            console.log('Ошибка при получении confirmation_token');
+          }
+        },
+        error: function() {
+          console.log('Ошибка при выполнении AJAX-запроса');
+        }
+      });
+    } else {
+      console.log('paymenttotal не существует или является пустой');
     }
   }
-
-  const requestData = {
-    name: name,
-    email: email,
-    phone: phone,
-    products: products,
-    price: paymenttotal,
-    ordernumber: ordernumber,
-  };
-
-  $.ajax({
-    url: 'https://gladbooks.ru/backend/yukassa.php',
-    type: 'POST',
-    dataType: 'json',
-    data: JSON.stringify(requestData),
-    contentType: 'application/json; charset=utf-8',
-    success: function(response) {
-      if (response.confirmationToken) {
-        let confirm_token = response.confirmationToken;
-        let payment_id = response.payId;
-        setToken(confirm_token, payment_id);
-      } else {
-        console.log('Ошибка при получении confirmation_token');
-      }
-    },
-    error: function() {
-      console.log('Ошибка при выполнении AJAX-запроса');
-    }
-  });
-} else {
-  console.log('paymenttotal не существует или является пустой');
 }
+yooKassa();
 
 // Инициализация виджета. Все параметры обязательные.
 function setToken (confirm_token, payment_id) {
@@ -453,19 +482,33 @@ function checkCartProduct() {
     var cart = JSON.parse(localStorage.getItem("cart"));
     var i;
     var product_url = window.location.pathname;
+
     // console.log(product_url);
 
     if (cart !== null && cart.length) {
+        var button = document.querySelector('.products-meta button');
+
         for (i = 0; i < cart.length; ++i) {
-          if (product_url == cart[i].url) {
-            var button = document.querySelector('.products-meta button');
+          if (product_url == cart[i].url &&
+              cart[i].sku == document.querySelector('.products-meta button[type=\'submit\']').getAttribute('data-sku')) {
+
             button.disabled = true;
             button.textContent = 'Уже в корзине';
           }
         }
     }
+    // reset product option variant
+    window.addEventListener('load', function() {
+      if (document.getElementById('variant')) {
+        var selectElement = document.getElementById('variant');
+        selectElement.selectedIndex = 0; // Сбрасываем выбор
+        // selectElement.value = 'defaultOptionValue';
+      }
+    });
 }
-checkCartProduct();
+if (document.querySelector('.products-meta button')) {
+  checkCartProduct();
+}
 
 
 // modals
