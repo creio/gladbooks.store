@@ -102,6 +102,8 @@ function addToCart(el) {
             url: el.querySelector('button[type=\'submit\']').getAttribute('data-url'),
             sku: el.querySelector('button[type=\'submit\']').getAttribute('data-sku'),
             title: el.querySelector('button[type=\'submit\']').getAttribute('data-title'),
+            cloudfilename: el.querySelector('button[type=\'submit\']').getAttribute('data-cloudfilename'),
+            formats: el.querySelector('button[type=\'submit\']').getAttribute('data-formats'),
             varianttype: el.querySelector('button[type=\'submit\']').getAttribute('data-varianttype'),
             variantname: el.querySelector('button[type=\'submit\']').getAttribute('data-variantname'),
             price: el.querySelector('button[type=\'submit\']').getAttribute('data-price'),
@@ -367,14 +369,142 @@ if(document.getElementById('paymenttotal')) document.getElementById('paymenttota
 
 
 
+/* send mail */
+function mailerSend (payment_id, dataStorage) {
+  var formatObject = dataStorage;
+  formatObject.payment_id = payment_id;
+  var formData = JSON.parse(localStorage.getItem("formData"));
+  formatObject.username = formData[0].name;
+  formatObject.email = formData[0].email;
+  formatObject.phone = formData[0].phone;
+
+  // console.log(formatObject);
+
+  // Отправка AJAX-запроса на PHP-обработчик с использованием jQuery
+  $.ajax({
+    url: 'https://gladbooks.ru/backend/mailer.php',
+    type: 'POST',
+    data: { formatObject: JSON.stringify(formatObject) },
+    success: function(response) {
+      console.log(response);
+
+      // Обработка ошибки
+      if (response.error) {
+        console.log(response.error);
+        // modalError();
+      }
+    },
+    error: function(xhr, status, error) {
+      // Обработка ошибки
+      console.log(error);
+      // modalError();
+    }
+  });
+}
+// mailerSend();
+
+
+/* cloud storage files */
+function cloudStorage (payment_id, callback) {
+  var cart = JSON.parse(localStorage.getItem("cart")), i;
+
+  var formatObject = {};
+
+  for (var i = 0; i < cart.length; i++) {
+    var key = cart[i].title+ ' (' +cart[i].variantname+ ') '+cart[i].price+ ' ₽';
+    var formatArray = cart[i].formats.split(",").map((format) => format.trim());
+
+    var formatFiles = [];
+    var formatMp3 = [];
+
+    if (formatArray.includes("mp3")) {
+      formatObject[key] = cart[i].cloudfilename + '.mp3';
+    }
+    formatArray.forEach((format) => {
+      if (format !== "mp3") {
+        formatFiles.push(cart[i].cloudfilename + '.' + format);
+      } else {
+        formatMp3.push(cart[i].cloudfilename + '.zip');
+      }
+    });
+
+    if (cart[i].variantname !== 'mp3') {
+      formatObject[key] = formatFiles;
+    } else {
+      formatObject[key] = formatMp3;
+    }
+  }
+
+  localStorage.setItem('dataStorage', []);
+  localStorage.setItem('dataStorage', JSON.stringify(formatObject));
+
+  // Отправка AJAX-запроса на PHP-обработчик с использованием jQuery
+  $.ajax({
+    url: 'https://gladbooks.ru/backend/firebase.php',
+    type: 'POST',
+    data: { formatObject: JSON.stringify(formatObject) },
+    success: function(response) {
+      var result = response;
+
+      document.querySelector('.pay-modal .pay_id').innerHTML = payment_id;
+
+      var linkContainer = document.createElement('span'); // Создайте элемент-контейнер для всех ссылок
+      for (var key in result) {
+        if (result.hasOwnProperty(key)) {
+          var name = result[key].name;
+          var urls = result[key].url;
+
+          var title = document.createElement('h6');
+          title.classList.add('text-secondary', 'my-3');
+          title.textContent = key;
+          linkContainer.appendChild(title);
+
+          name.forEach((fileName, index) => {
+            var link = document.createElement('a');
+            link.href = urls[index];
+            link.textContent = fileName;
+            link.target = "_blank";
+
+            var listItem = document.createElement('li');
+            listItem.classList.add('list-group-item');
+            listItem.appendChild(link);
+
+            linkContainer.appendChild(listItem);
+          });
+        }
+      }
+      document.querySelector('.list-group .links-header').insertAdjacentElement('afterend', linkContainer);
+
+      callback(null, result);
+
+      // Обработка ошибки
+      if (response.error) {
+        console.log(response.error);
+        modalError();
+      }
+    },
+    error: function(xhr, status, error) {
+      // Обработка ошибки
+      console.log(error);
+      modalError();
+    }
+  });
+}
+
+function modalError () {
+  var modalTitle = document.querySelector('.pay-modal .modal-title');
+  modalTitle.innerHTML = 'Ошибка';
+  var modalBody = document.querySelector('.pay-modal .modal-body');
+  modalBody.innerHTML = '<p>Попробуйте перезагрузить страницу, или отправьте письмо на <a href="mailto:admin@gladbooks.ru">admin@gladbooks.ru</a> с описанием проблемы.</p>';
+  var modalFooter = document.querySelector('.pay-modal .modal-footer');
+  modalFooter.remove();
+}
+
 /* юкасса */
 function yooKassa () {
   if (document.getElementById('payment-form')) {
     var ordernumber = localStorage.getItem("ordernumber");
     var paymenttotal = parseFloat(getCartTotal() + getAddonTotal()).toFixed(2);
-
-    console.log(ordernumber);
-    console.log(paymenttotal);
 
     if (paymenttotal && paymenttotal !== '0.00') {
 
@@ -452,6 +582,18 @@ function setToken (confirm_token, payment_id) {
     console.log('Идентификатор платежа:', payment_id);
 
     localStorage.setItem("paymentId", payment_id);
+
+    // получение файлов
+    cloudStorage(payment_id, function(error, result) {
+      if (error) {
+        console.log(error);
+      } else {
+        // console.log(result);
+        // отправка на почту клиента
+        mailerSend(payment_id, result);
+      }
+    });
+
     localStorage.setItem("cart", "[]");
     localStorage.setItem("addons", "[]");
     localStorage.setItem("ordernumber", "");
@@ -490,7 +632,7 @@ function checkCartProduct() {
 
         for (i = 0; i < cart.length; ++i) {
           if (product_url == cart[i].url &&
-              cart[i].sku == document.querySelector('.products-meta button[type=\'submit\']').getAttribute('data-sku')) {
+              cart[i].sku == button.getAttribute('data-sku')) {
 
             button.disabled = true;
             button.textContent = 'Уже в корзине';

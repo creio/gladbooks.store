@@ -11,7 +11,7 @@
 </div>
 
 <div id="checkout">
-  <form action="/shop/paylink/" method="post" onchange="setAddons(this)">
+  <form class="needs-validation" action="/shop/paylink/" method="post" onchange="setAddons(this)">
     <input name="_gotcha" style="display:none" type="text">
     <input name="_to" type="hidden" value="joost@vdschee.nl">
     <input name="_subject" value="Новый заказ!" type="hidden">
@@ -20,7 +20,10 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
-          <input type="text" placeholder="Имя" class="form-control" name="name" id="name" required>
+          <input type="text" class="form-control" id="name" name="name" placeholder="Имя">
+          <div class="invalid-feedback">
+            Пожалуйста, введите имя.
+          </div>
         </div>
       </div>
     </div>
@@ -28,7 +31,10 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
-          <input type="email" placeholder="name@example.com" class="form-control" name="email" id="email" required>
+          <input type="email" class="form-control" placeholder="name@example.com" class="form-control" name="email" id="email">
+          <div class="invalid-feedback">
+            Пожалуйста, введите действительный email.
+          </div>
         </div>
       </div>
     </div>
@@ -36,7 +42,10 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
-          <input type="phone" placeholder="+7 925 111-11-11" class="form-control" name="phone" id="phone" required>
+          <input type="tel" class="form-control" placeholder="+7 925 111-11-11" class="form-control" name="phone" id="phone">
+          <div class="invalid-feedback">
+            Пожалуйста, введите действительный номер телефона.
+          </div>
         </div>
       </div>
     </div>

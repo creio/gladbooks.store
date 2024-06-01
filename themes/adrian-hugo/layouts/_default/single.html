@@ -132,6 +132,15 @@
               </div>
               {{ end }}
 
+              {{ $formats := .Params.formats }}
+              {{ $formatList := "" }}
+              {{ range $index, $format := $formats }}
+                {{ $formatList = print $formatList $format }}
+                {{ if lt $index (sub (len $formats) 1) }}
+                  {{ $formatList = print $formatList ", " }}
+                {{ end }}
+              {{ end }}
+
               <button type="submit" class="btn btn-main btn-small mt-5"
                 data-item-id="{{ .Title | urlize }}__{{ .Params.Price }}"
                 data-url="{{ .RelPermalink }}"
@@ -140,6 +149,8 @@
                 {{*/}}
                 data-sku="{{ with .Params.variants }}{{ (index . 0).sku }}{{ else }}default{{ end }}_{{ .Title | urlize }}"
                 data-title="{{ .Title }}"
+                data-formats="{{ $formatList }}"
+                data-cloudfilename="{{ .Params.cloud_file_name }}"
                 data-varianttype="{{ .Params.variant_type }}"
                 {{/*}}
                 data-variantname="{{ .Title | urlize }}"

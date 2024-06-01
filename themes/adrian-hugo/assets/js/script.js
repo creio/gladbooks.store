@@ -92,3 +92,63 @@
 
 
 })(jQuery);
+
+
+
+// form validate
+var form = document.querySelector('.needs-validation');
+var nameInput = document.getElementById('name');
+var emailInput = document.getElementById('email');
+var phoneInput = document.getElementById('phone');
+
+if (form) {
+  form.addEventListener('submit', function(event) {
+    if (!validateName() || !validateEmail() || !validatePhone()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    form.classList.add('was-validated');
+  });
+}
+
+function validateName() {
+  var value = nameInput.value.trim();
+
+  if (value === '') {
+    nameInput.classList.add('is-invalid');
+    return false;
+  } else {
+    nameInput.classList.remove('is-invalid');
+    return true;
+  }
+}
+
+function validateEmail() {
+  var value = emailInput.value.trim();
+  var emailRegex = /^\S+@\S+\.\S+$/;
+
+  if (value === '' || !emailRegex.test(value)) {
+    emailInput.classList.add('is-invalid');
+    return false;
+  } else {
+    emailInput.classList.remove('is-invalid');
+    return true;
+  }
+}
+
+$(document).ready(function() {
+  $('#phone').inputmask('+7 (999) 999-99-99');
+});
+
+function validatePhone() {
+  var value = phoneInput.value;
+
+  if (value === '') {
+    phoneInput.classList.add('is-invalid');
+    return false;
+  } else {
+    phoneInput.classList.remove('is-invalid');
+    return true;
+  }
+}

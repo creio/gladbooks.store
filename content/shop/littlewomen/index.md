@@ -16,16 +16,22 @@ images:
   # - "images/products/bag-2.jpg"
 
 # product Price
-price: "98.00"
+price: "91.00"
 priceBefore: ""
 
 # categories
 categories : ["Олкотт"]
 
 # formats
-formats : ["epub", "mp3"]
+formats : ["epub"]
 
 variant_type: book
+variants:
+- name: e-books
+  price: "91.00"
+  sku: e-books
+
+cloud_file_name: littlewomen
 ---
 
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
