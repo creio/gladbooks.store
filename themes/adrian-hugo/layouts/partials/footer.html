@@ -84,7 +84,7 @@
 {{ end }}
 
 <!-- Main Script -->
-{{ $script := resources.Get "js/script.js" | minify}}
+{{ $script := resources.Get "js/script.js"}}
 <script src="{{ $script.RelPermalink }}"></script>
-{{ $webshop := resources.Get "js/webshop.js" }}
+{{ $webshop := resources.Get "js/webshop.js" | minify}}
 <script src="{{ $webshop.RelPermalink }}"></script>

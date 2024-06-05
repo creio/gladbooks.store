@@ -96,22 +96,6 @@
 
 
 // form validate
-var form = document.querySelector('.needs-validation');
-var nameInput = document.getElementById('name');
-var emailInput = document.getElementById('email');
-var phoneInput = document.getElementById('phone');
-
-if (form) {
-  form.addEventListener('submit', function(event) {
-    if (!validateName() || !validateEmail() || !validatePhone()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    form.classList.add('was-validated');
-  });
-}
-
 function validateName() {
   var value = nameInput.value.trim();
 
@@ -137,10 +121,6 @@ function validateEmail() {
   }
 }
 
-$(document).ready(function() {
-  $('#phone').inputmask('+7 (999) 999-99-99');
-});
-
 function validatePhone() {
   var value = phoneInput.value;
 
@@ -152,3 +132,113 @@ function validatePhone() {
     return true;
   }
 }
+
+function validateTextarea() {
+  var value = document.getElementById('message').value;
+
+  if (value.trim() === '') {
+    document.getElementById('message').classList.add('is-invalid');
+    return false;
+  } else {
+    document.getElementById('message').classList.remove('is-invalid');
+    return true;
+  }
+}
+
+
+// checkoutform
+var checkoutform = document.querySelector('#checkout .needs-validation');
+var nameInput = document.getElementById('name');
+var emailInput = document.getElementById('email');
+var phoneInput = document.getElementById('phone');
+
+if (checkoutform) {
+  checkoutform.addEventListener('submit', function(event) {
+    if (!validateName() || !validateEmail() || !validatePhone()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    checkoutform.classList.add('was-validated');
+  });
+}
+
+
+// contactform
+$(document).ready(function() {
+  $('#phone').inputmask('+7 (999) 999-99-99');
+
+  var contactform = document.getElementById('contact-form');
+  if (contactform) {
+    contactform.addEventListener('submit', function(e) {
+      if (validateName() && validateEmail() && validatePhone() && validateTextarea()) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var formData = {
+          name: $('#name').val(),
+          email: $('#email').val(),
+          phone: $('#phone').val(),
+          message: $('#message').val(),
+          recaptchaResponse: $('#recaptchaResponse').val()
+        };
+
+        $.ajax({
+          url: 'https://gladbooks.ru/backend/contactform.php', // Замените на путь к вашему PHP скрипту
+          type: 'POST',
+          dataType: 'json',
+          data: JSON.stringify(formData),
+          contentType: 'application/json; charset=utf-8',
+          success: function(response) {
+            // Обработать успешный ответ
+            console.log(response);
+
+            if (response.result === 'success') {
+              // Показать пользователю сообщение об успешной отправке
+              alert(response.status);
+              // Получение элементов формы
+              var form = document.getElementById('contact-form');
+              var formInputs = form.querySelectorAll('input, textarea');
+              // Сброс значений полей формы
+              formInputs.forEach(function(input) {
+                input.value = '';
+              });
+              // Перезагрузка страницы
+              setTimeout(function() {
+                location.reload();
+              }, 1000); // Задержка в миллисекундах (здесь 1000 = 1 секунда)
+            } else {
+              // Показать пользователю сообщение об ошибке
+              alert(response.status);
+              setTimeout(function() {
+                location.reload();
+              }, 300);
+            }
+          },
+          error: function(xhr, status, error) {
+            // Обработать ошибку
+            console.log(xhr.responseText);
+            // alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+              /*setTimeout(function() {
+                location.reload();
+              }, 300);*/
+          }
+        });
+      }
+
+      contactform.classList.add('was-validated');
+
+    });
+  }
+
+  $('#contact-form').on('submit', function(e) {
+    // Отменить стандартное поведение отправки формы
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!validateName() || !validateEmail() || !validatePhone() || !validateTextarea()) {
+      // Поля формы невалидны, не отправляем форму
+      return;
+    }
+  });
+});

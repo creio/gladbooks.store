@@ -403,6 +403,67 @@ function mailerSend (payment_id, dataStorage) {
 }
 // mailerSend();
 
+/* send mail admin info pay */
+function mailerAdmin (payment_id) {
+  var formData = JSON.parse(localStorage.getItem("formData"));
+  formData[0].payment_id = payment_id;
+
+  // console.log(formData);
+
+  // Отправка AJAX-запроса на PHP-обработчик с использованием jQuery
+  $.ajax({
+    url: 'https://gladbooks.ru/backend/maileradmin.php',
+    type: 'POST',
+    data: { dataObject: JSON.stringify(formData) },
+    success: function(response) {
+      console.log(response);
+
+      // Обработка ошибки
+      if (response.error) {
+        console.log(response.error);
+        // modalError();
+      }
+    },
+    error: function(xhr, status, error) {
+      // Обработка ошибки
+      console.log(error);
+      // modalError();
+    }
+  });
+}
+// mailerAdmin('321-123-123-123');
+
+
+/* send telegram admin info pay */
+function tgPay (payment_id) {
+  var tgpayData = JSON.parse(localStorage.getItem("formData"));
+  tgpayData[0].payment_id = payment_id;
+
+  // console.log(formData);
+
+  // Отправка AJAX-запроса на PHP-обработчик с использованием jQuery
+  $.ajax({
+    url: 'https://gladbooks.ru/backend/tgpay.php',
+    type: 'POST',
+    data: { tgpayObject: JSON.stringify(tgpayData) },
+    success: function(response) {
+      console.log(response);
+
+      // Обработка ошибки
+      if (response.error) {
+        console.log(response.error);
+        // modalError();
+      }
+    },
+    error: function(xhr, status, error) {
+      // Обработка ошибки
+      console.log(error);
+      // modalError();
+    }
+  });
+}
+// tgPay('321-123-123-123');
+
 
 /* cloud storage files */
 function cloudStorage (payment_id, callback) {
@@ -430,7 +491,8 @@ function cloudStorage (payment_id, callback) {
 
     if (cart[i].variantname !== 'mp3') {
       formatObject[key] = formatFiles;
-    } else {
+    }
+    if (cart[i].variantname === 'mp3') {
       formatObject[key] = formatMp3;
     }
   }
@@ -593,6 +655,10 @@ function setToken (confirm_token, payment_id) {
         mailerSend(payment_id, result);
       }
     });
+    // отправка на почту admin
+    mailerAdmin(payment_id);
+    // отправка в telegram
+    tgPay(payment_id);
 
     localStorage.setItem("cart", "[]");
     localStorage.setItem("addons", "[]");
